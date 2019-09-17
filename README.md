@@ -1,29 +1,13 @@
-[33mcommit 86d41a2706a613d122fc771cb32766885323dc34[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
-Author: douglasabraga <51207364+douglasabraga@users.noreply.github.com>
-Date:   Tue Sep 17 10:09:53 2019 -0300
+#Árvore Binária em C
 
-    Delete README.md
+Desenvolver uma estrutura de dados usando arvore binária com alocação dinâmica que permita ler o arquivo gerado no aplicativo fornecido pelo professor. Esta estrutura deve inserir os elementos na árvore binária pelo código. E deve ter as seguintes opções:
 
-[1mdiff --git a/README.md b/README.md[m
-[1mdeleted file mode 100644[m
-[1mindex a4e518e..0000000[m
-[1m--- a/README.md[m
-[1m+++ /dev/null[m
-[36m@@ -1,2 +0,0 @@[m
-[31m-# tpa-arvore[m
-[31m-Trabalho de Técnicas de Programação Avançadas[m
-
-[33mcommit 56961783376d4e40b411c5585699bb653be4815c[m[33m ([m[1;31morigin/branch-provisoria[m[33m)[m
-Author: douglasabraga <51207364+douglasabraga@users.noreply.github.com>
-Date:   Tue Sep 17 09:16:20 2019 -0300
-
-    Initial commit
-
-[1mdiff --git a/README.md b/README.md[m
-[1mnew file mode 100644[m
-[1mindex 0000000..a4e518e[m
-[1m--- /dev/null[m
-[1m+++ b/README.md[m
-[36m@@ -0,0 +1,2 @@[m
-[32m+[m[32m# tpa-arvore[m
-[32m+[m[32mTrabalho de Técnicas de Programação Avançadas[m
+(0,5 pontos) Calcular Altura da árvore
+(0,5 pontos) Calcular nível de determinado nó
+(0,5 pontos) Verificar se a arvore é estritamente binária
+(0,5 pontos) Verificar se a arvore é estritamente binária e completa
+(0,5 pontos) Uma opção que conte o número de nós da árvore de forma recursiva
+(0,5 pontos) Imprima os elementos em ordem crescente e decrescente recursivamente.
+(0,5 pontos) Opções que permitam buscar um elemento pela chave, inserir novo elemento e excluir.
+(1,5 ponto) Duas árvores binárias são espelho-similares se elas são vazias ou se elas não são vazias e as subárvores esquerdas de cada uma são espelho-similares as subárvores direita da outra. Escreva uma opção que leia outro arquivo e monte uma arvore binária em uma estrutura de vetor e determine se a árvore binária é espelho similar da arvore anterior.
+(2 ponto) Crie uma estrutura de hash fechada a partir dos dados inseridos na arvore. Que ao invés de inserir os elementos duplicados em uma lista, trabalhe com uma arvore binária. Implemente uma opção de busca nesta nova estrutura e compare com o tempo de busca de um elemento na estrutura anterior.
