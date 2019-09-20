@@ -1,7 +1,7 @@
 #include <stdlib.h>
-#include <stdlio.h>
+#include <stdio.h>
 
 int main(){
-
+    printf("= MENU =\n");
     getchar();
 }
