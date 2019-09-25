@@ -34,6 +34,14 @@ int main(){
 	
 	printf("\n\n\nCaminhamento CRESCENTE:");
 	crescente(raiz);
+	
+	i = estritamente_bin(&raiz);
+	
+	if(i){
+		printf("\nEstritamente");
+	}else{
+		printf("\nnao Estritamente");
+	}
 
 	printf("\n\n\n");
 

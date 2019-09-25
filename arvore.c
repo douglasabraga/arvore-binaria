@@ -155,3 +155,15 @@ TNodo *MaiorDireita(TNodo **no){
        return aux;
        }
 }
+
+int estritamente_bin(TNodo *no){
+    if(!no->dir && !no->esq){
+        return 1;
+    }
+
+    if(no->dir && no->esq){
+        return estritamente_bin(no->esq) && estritamente_bin(no->dir);
+    }
+
+    return 0;
+}

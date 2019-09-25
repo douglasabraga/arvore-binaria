@@ -22,4 +22,4 @@ int count(TNodo *R);
 TNodo *searchR(TNodo *R, int v);
 int calcularNivelNodo(TNodo *R, int k);
 void decrescente(TNodo *R);
-
+int estritamente_bin(TNodo *no);
