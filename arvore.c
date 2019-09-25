@@ -8,7 +8,7 @@ void inicializa(TNodo **R){
 void insere(TNodo **R, int id, char nome[50], float saldo){
     if((*R) == NULL){
     	(*R) = geraNodo(id, nome, saldo);
-    } else if (strcmp((*R)->nome, nome) < 0){
+    } else if ((*R)->id < id){
     	 if((*R)->dir == NULL){
     	 	(*R)->dir = geraNodo(id, nome, saldo);
     	 } else {
@@ -44,8 +44,16 @@ void preOrdem(TNodo *R){
 void emOrdem(TNodo *R){
 	if(R != NULL){
     	emOrdem(R->esq);
-		printf("\t%s",R->nome);
+		printf("\t%s %d",R->nome, R->id);
 		emOrdem(R->dir);
+	}//if
+}
+
+void decrescente(TNodo *R){
+	if(R != NULL){
+    	emOrdem(R->dir);
+		printf("\t%s %d",R->nome, R->id);
+		emOrdem(R->esq);
 	}//if
 }
 //=================================================
@@ -53,19 +61,13 @@ void posOrdem(TNodo *R){
 	if(R != NULL){
     	posOrdem(R->esq);
 		posOrdem(R->dir);
-		printf("\t%s",R->nome);
+		printf("\t%s %d",R->nome, R->id);
 	}//if
 }
 //================================================
 
-// Esta função devolve o número de nós
-// da árvore binária cuja raiz é R.
-int count(TNodo *R){
-    if (R == NULL) return 0;
-    return count(R->esq) + count(R->dir) + 1;
-}
 
-// Devolve o altura de um nó R em uma árvore binária.
+// Devolve a altura de um nó R em uma árvore binária.
 
 int height(TNodo *R){
     int u, v;
@@ -76,7 +78,30 @@ int height(TNodo *R){
     else return v + 1;
 }
 
-// Recebe uma árvore de busca h e um inteiro v.
+// Esta função devolve o número de nós
+// da árvore binária cuja raiz é R.
+int count(TNodo *R){
+    if (R == NULL) return 0;
+    return count(R->esq) + count(R->dir) + 1;
+}
+
+
+int calcularNivelNodo(TNodo *R, int k){
+    TNodo *aux = R;
+    int nivel = 0;
+    while (aux != NULL && aux->id != k){
+        if(k < aux->id){
+            aux = aux->esq;
+        }else{
+            aux = aux->dir;
+        }
+       nivel++;
+    }
+    return nivel;
+}
+
+
+// Recebe uma árvore de busca R e um inteiro v.
 // Devolve um nó cuja chave é igual a v. 
 // Devolve NULL se tal nó não existe.
 //
