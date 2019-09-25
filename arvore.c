@@ -32,38 +32,25 @@ TNodo *geraNodo(int id, char nome[50], float saldo){
    novo->dir = NULL;
    return novo;
 }
-//=================================================
-void preOrdem(TNodo *R){
-	if(R != NULL){
-		printf("\t%s %d",R->nome, R->id);
-		preOrdem(R->esq);
-		preOrdem(R->dir);
-	}//if
-}
+
 //================================================
-void emOrdem(TNodo *R){
+void crescente(TNodo *R){
 	if(R != NULL){
-    	emOrdem(R->esq);
-		printf("\t%s %d",R->nome, R->id);
-		emOrdem(R->dir);
+    	crescente(R->esq);
+		printf(" %s %d",R->nome, R->id);
+		crescente(R->dir);
 	}//if
 }
 
 void decrescente(TNodo *R){
 	if(R != NULL){
-    	emOrdem(R->dir);
-		printf("\t%s %d",R->nome, R->id);
-		emOrdem(R->esq);
+    	decrescente(R->dir);
+		printf(" %s %d",R->nome, R->id);
+		decrescente(R->esq);
 	}//if
 }
 //=================================================
-void posOrdem(TNodo *R){
-	if(R != NULL){
-    	posOrdem(R->esq);
-		posOrdem(R->dir);
-		printf("\t%s %d",R->nome, R->id);
-	}//if
-}
+
 //================================================
 
 
@@ -85,10 +72,18 @@ int count(TNodo *R){
     return count(R->esq) + count(R->dir) + 1;
 }
 
-
 int calcularNivelNodo(TNodo *R, int k){
     TNodo *aux = R;
     int nivel = 0;
+    
+	if(R->esq == NULL || R->dir == NULL){
+		if(R->id != k){
+			printf("\nO id informado nao e valido");
+			return nivel;
+		}
+    	return nivel;
+	}
+	
     while (aux != NULL && aux->id != k){
         if(k < aux->id){
             aux = aux->esq;
@@ -107,11 +102,82 @@ int calcularNivelNodo(TNodo *R, int k){
 //
 TNodo *searchR(TNodo *R, int v) {
     int t;
-    if (R == NULL) return NULL;
+    if (R == NULL){
+    	return NULL;
+	}
     t = R->id;
-    if (v == t) return R;
-    if (v < t) 
+    
+    if(v == t){
+    	return R;	
+	}else if (v < t){
        return searchR(R->esq, v);
-    else 
+	}else{
        return searchR(R->dir, v);
+   }
+}
+
+//https://pt.stackoverflow.com/questions/192974/como-funciona-a-remo%C3%A7%C3%A3o-de-%C3%A1rvore-bin%C3%A1ria-em-c
+
+void remover(TNodo **R, int id){
+    if(*R == NULL){   // esta verificacao serve para caso o id nao exista na arvore.
+       printf("Numero %d nao existe na arvore!", id);
+       //getch();
+       return;
+    }
+    if(id < (*R)->id){
+       remover(&(*R)->esq, id);
+    }else{
+       	if(id > (*R)->id){
+          remover(&(*R)->dir, id);
+       	}else{    // se nao eh menor nem maior, logo, eh o id que estou procurando! :)
+          TNodo *pAux = *R;     // quem programar no Embarcadero vai ter que declarar o pAux no inicio do void! :[
+          if(((*R)->esq == NULL) && ((*R)->dir == NULL)){         // se nao houver filhos...
+                free(pAux);
+                (*R) = NULL;   
+          	}else{     // so tem o filho da dir
+             if((*R)->esq == NULL){
+                (*R) = (*R)->dir;
+                pAux->dir = NULL;
+                free(pAux); pAux = NULL;     
+            }else{            //so tem filho da esq
+                if((*R)->dir == NULL){
+                    (*R) = (*R)->esq;
+                    pAux->esq = NULL;
+                    free(pAux); pAux = NULL;
+                }else{       //Escolhi fazer o maior filho direito da subarvore esq.
+                   pAux = MaiorDireita(&(*R)->esq); //se vc quiser usar o Menor da esq, so o que mudaria seria isso:
+                   pAux->esq = (*R)->esq;          //        pAux = Menoresq(&(*R)->dir);
+                   pAux->dir = (*R)->dir;
+                   (*R)->esq = (*R)->dir = NULL;
+                   free((*R));  *R = pAux;  pAux = NULL;   
+                   }
+                }
+             }
+          }
+      }
+}
+
+TNodo *MaiorDireita(TNodo **no){
+    if((*no)->dir != NULL) 
+       return MaiorDireita(&(*no)->dir);
+    else{
+       TNodo *aux = *no;
+       if((*no)->esq != NULL) // se nao houver essa verificacao, esse nó vai perder todos os seus filhos da esquerda!
+          *no = (*no)->esq;
+       else
+          *no = NULL;
+       return aux;
+       }
+}
+
+int estritamente_bin(TNodo *no){
+    if(!no->dir && !no->esq){
+        return 1;
+    }
+
+    if(no->dir && no->esq){
+        return estritamente_bin(no->esq) && estritamente_bin(no->dir);
+    }
+
+    return 0;
 }
