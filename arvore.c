@@ -75,6 +75,15 @@ int count(TNodo *R){
 int calcularNivelNodo(TNodo *R, int k){
     TNodo *aux = R;
     int nivel = 0;
+    
+	if(R->esq == NULL || R->dir == NULL){
+		if(R->id != k){
+			printf("\nO id informado nao e valido");
+			return nivel;
+		}
+    	return nivel;
+	}
+	
     while (aux != NULL && aux->id != k){
         if(k < aux->id){
             aux = aux->esq;
@@ -93,21 +102,26 @@ int calcularNivelNodo(TNodo *R, int k){
 //
 TNodo *searchR(TNodo *R, int v) {
     int t;
-    if (R == NULL) return NULL;
+    if (R == NULL){
+    	return NULL;
+	}
     t = R->id;
-    if (v == t) return R;
-    if (v < t) 
+    
+    if(v == t){
+    	return R;	
+	}else if (v < t){
        return searchR(R->esq, v);
-    else 
+	}else{
        return searchR(R->dir, v);
+   }
 }
 
 //https://pt.stackoverflow.com/questions/192974/como-funciona-a-remo%C3%A7%C3%A3o-de-%C3%A1rvore-bin%C3%A1ria-em-c
 
 void remover(TNodo **R, int id){
     if(*R == NULL){   // esta verificacao serve para caso o id nao exista na arvore.
-       printf("Numero nao existe na arvore!");
-       getch();
+       printf("Numero %d nao existe na arvore!", id);
+       //getch();
        return;
     }
     if(id < (*R)->id){
