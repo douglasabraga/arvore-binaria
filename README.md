@@ -4,7 +4,7 @@ Desenvolver uma estrutura de dados usando arvore binária com alocação dinâmi
 
 1. ~(0,5 pontos) Calcular Altura da árvore~
 2. ~(0,5 pontos) Calcular nível de determinado nó~
-3. (0,5 pontos) Verificar se a arvore é estritamente binária
+3. ~(0,5 pontos) Verificar se a arvore é estritamente binária~
 4. (0,5 pontos) Verificar se a arvore é estritamente binária e completa
 5. ~(0,5 pontos) Uma opção que conte o número de nós da árvore de forma recursiva~
 6. ~(0,5 pontos) Imprima os elementos em ordem crescente e decrescente recursivamente.~
