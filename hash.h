@@ -9,3 +9,4 @@ int funcaohash(int chave);
 void inicializarHash(int tamanho);
 int percorrerArvoreInserirHash(TNodo *R);
 void imprimirHash();
+TNodo* buscaHash(int chave);

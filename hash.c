@@ -7,9 +7,9 @@ TNodo* aloca(int valor){
 
 void insereHash(int id, char nome[50], float saldo){
 	int chave = funcaohash(id);
-	TNodo *aux = &HASH[chave];
+	//TNodo *aux = &HASH[chave];
 	
-	printf("\nid->%d nome->%s saldo->%.2f", aux->id, aux->nome, aux->saldo);
+	//printf("\nid->%d nome->%s saldo->%.2f", aux->id, aux->nome, aux->saldo);
 	
     if(HASH[chave].id == 0){
     	HASH[chave].id = id;
@@ -20,7 +20,12 @@ void insereHash(int id, char nome[50], float saldo){
     	strcpy(aux->nome, nome);
     	aux->saldo = saldo;*/
     }else{
-        insere(&aux, id, nome, saldo);
+    	if(HASH[chave].id > id){
+    		insere(&HASH[chave].esq, id, nome, saldo);
+		}else{
+			insere(&HASH[chave].dir, id, nome, saldo);
+		}
+        	
         //printf("\n\naaa id: %d nome: %s saldo: %.2f",aux->id, aux->nome, aux->saldo );
     }
 }
@@ -47,32 +52,24 @@ void imprimirHash(){
         printf("NULL\n");
     }
 }
-/*
-TNodo* buscaLista(int chave) {
-	int pos = funcaohash(chave);
-	TCliente *lista = &hash[pos];
-	while (lista != NULL){  // n+1
-		if (chave == lista->codigo) return lista; // Se encontrou retorna verdadeiro // n
-		lista = lista->prox;
-	}
-	return lista;
-}*/
 
-int percorrerArvoreInserirHash(TNodo *R){
-	if (R == NULL) return 0;
-	insereHash(R->id, R->nome, R->saldo);
-    return percorrerArvoreInserirHash(R->esq) + percorrerArvoreInserirHash(R->dir);
+TNodo* buscaHash(int chave) {
+	int pos = funcaohash(chave);
+	TNodo *no = &HASH[pos];
+	while (no != NULL){  // n+1
+		if (chave == no->id) return no; // Se encontrou retorna verdadeiro // n
+		no = no->dir;
+	}
+	return no;
 }
 
 void inicializarHash(int tamanho){
 	HASH = aloca(tamanho);
     int i;
     for(i = 0; i < tam; i++){
-    	//HASH[i] == NULL;
         HASH[i].id = 0;
         strcpy(HASH[i].nome, "");
         HASH[i].saldo = 0.0;
-        //HASH[i].dir = NULL;
-        //HASH[i].esq = NULL;
     }
 }
+

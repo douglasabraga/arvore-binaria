@@ -40,7 +40,7 @@ void separarDadosDaLinha(TNodo **R, char linha[50]){
 		info = strtok(NULL,delimitador); // Separa o codigo da linha
 
 		insere(&(*R), id, nome, saldo);
-		
+		insereHash(id, nome, saldo);
 	}
 //	return hash;
 }

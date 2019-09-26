@@ -2,7 +2,7 @@
 #include "hash.h"
 
 int main(){
-	inicializarHash(10);
+	inicializarHash(5);
 	inicializa(&raiz);
 	lerArquivo(&raiz);
 	h = height(raiz);
@@ -28,15 +28,11 @@ int main(){
 		printf("\n\nValor informado para pesquisa nao existe!");
 	}
 	
-	 percorrerArvoreInserirHash(raiz);
-	 printf("\n\nAASAA");
-	 printf("\nINSERINDO MANUALMENTE");
-	 insereHash(7,"silva", 23.123);
-	 insereHash(2,"falko", 1.23);
-	 insereHash(1,"dani", 56.123);
-	 insereHash(3,"dodo", 23.444);
-	 //printf("\nValor id: %d", HASH[1].id);                                                                               
-	 imprimirHash();
+	TNodo *no = buscaHash(2);
+	
+	printf("\n\nBusca feita: %d, %s\n\n", no->id, no->nome);
+                                                                               
+	imprimirHash();
                  
     getchar();
 }
