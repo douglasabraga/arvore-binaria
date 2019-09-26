@@ -172,6 +172,7 @@ TNodo *MaiorDireita(TNodo **no){
 
 int estritamente_bin(TNodo *no){
     if(!no->dir && !no->esq){
+    	printf("\n\nArvore nao Estritamente Binaria");
         return 1;
     }
 
@@ -180,4 +181,22 @@ int estritamente_bin(TNodo *no){
     }
 
     return 0;
+}
+
+void estritamenteBinariaCompleta(TNodo *no){
+	
+	if(estritamente_bin(no)){
+		if(contaNosFolhas(no) == pow(2, h)){
+			printf("e Completa!");
+		}else{
+			printf("!");
+		}
+	}else{
+		printf("\nNao estritamente binaria e nao completa");
+	}
+}
+
+int contaNosFolhas(TNodo *no){
+    if (no == NULL) return 1;
+    return count(no->esq) + count(no->dir);
 }

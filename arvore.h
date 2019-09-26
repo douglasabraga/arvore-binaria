@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 typedef struct tipoNodo{
 	int id;
@@ -10,6 +11,7 @@ typedef struct tipoNodo{
 }TNodo;
 
 TNodo *raiz;
+int h;
 
 void inicializa(TNodo **R);
 void insere(TNodo **R, int id, char nome[50], float saldo);
@@ -23,3 +25,6 @@ TNodo *searchR(TNodo *R, int v);
 int calcularNivelNodo(TNodo *R, int k);
 void decrescente(TNodo *R);
 int estritamente_bin(TNodo *no);
+int contaNosFolhas(TNodo *no);
+void estritamenteBinariaCompleta(TNodo *no);
+
