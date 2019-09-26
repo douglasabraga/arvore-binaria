@@ -1,5 +1,49 @@
 
-#include "arvore.h"
+#include "hash.h"
+
+void lerArquivo(TNodo **R){
+	char linha[50]; // string armazenara a linha
+    FILE *arq;
+
+    arq = fopen("DadosBancoPulini.txt","r"); // Abre o arquivo
+    if (arq == NULL){  // Se houve erro na abertura
+		printf("Problemas na abertura do arquivo\n");
+	}else{
+		while(fgets(linha, sizeof(linha)-1, arq) != NULL) { // Loop para ler cada linha do arquivo enquanto houver linhas
+			separarDadosDaLinha(&(*R),linha);
+		}
+	}
+    fclose(arq);
+    //return hash;
+}
+
+void separarDadosDaLinha(TNodo **R, char linha[50]){
+	char delimitador[] = "|"; // Caracter delimitador
+    char *info; // Ponteiro para armazenar as informacoes
+
+	int id;
+	char nome[50];
+	float saldo;
+
+	info = strtok(linha, delimitador); // info recebe a primeira string antes do primeiro delimitador da primeira linha
+
+	while(info != NULL) { // Enquanto houver linhas no arquivo
+
+		id = atoi(info); // Copia info para id
+
+		info = strtok(NULL, delimitador); // Separa o nome da linha
+		strcpy(nome, info);
+
+		info = strtok(NULL, delimitador); // Separa o saldo da linha
+		saldo = atof(info);
+
+		info = strtok(NULL,delimitador); // Separa o codigo da linha
+
+		insere(&(*R), id, nome, saldo);
+		
+	}
+//	return hash;
+}
 
 void inicializa(TNodo **R){
     (*R) = NULL;
@@ -8,6 +52,7 @@ void inicializa(TNodo **R){
 void insere(TNodo **R, int id, char nome[50], float saldo){
     if((*R) == NULL){
     	(*R) = geraNodo(id, nome, saldo);
+    	printf("\nINSEREEEid: %d nome: %s saldo: %.2f", (*R)->id,(*R)->nome,(*R)->saldo);
     } else if ((*R)->id < id){
     	 if((*R)->dir == NULL){
     	 	(*R)->dir = geraNodo(id, nome, saldo);
@@ -21,10 +66,11 @@ void insere(TNodo **R, int id, char nome[50], float saldo){
     		insere(&(*R)->esq, id, nome, saldo);
     	}
     }
+    
 }
 //=================================================
 TNodo *geraNodo(int id, char nome[50], float saldo){
-   TNodo *novo = (TNodo *)malloc(sizeof(TNodo));
+   TNodo *novo = (TNodo *)calloc(1,sizeof(TNodo));
    novo->id = id;
    strcpy(novo->nome,nome);
    novo->saldo = saldo;
@@ -54,7 +100,7 @@ void decrescente(TNodo *R){
 //================================================
 
 
-// Devolve a altura de um nó R em uma árvore binária.
+// Devolve a altura de um no R em uma arvore binaria.
 
 int height(TNodo *R){
     int u, v;
@@ -65,11 +111,11 @@ int height(TNodo *R){
     else return v + 1;
 }
 
-// Esta função devolve o número de nós
-// da árvore binária cuja raiz é R.
-int count(TNodo *R){
+// Esta funcao devolve o numero de nos
+// da arvore binaria cuja raiz e R.
+int qntdNos(TNodo *R){
     if (R == NULL) return 0;
-    return count(R->esq) + count(R->dir) + 1;
+    return qntdNos(R->esq) + qntdNos(R->dir) + 1;
 }
 
 int calcularNivelNodo(TNodo *R, int k){
@@ -78,7 +124,7 @@ int calcularNivelNodo(TNodo *R, int k){
     
 	if(R->esq == NULL || R->dir == NULL){
 		if(R->id != k){
-			printf("\nO id informado nao e valido");
+			printf("\n\nO id informado nao e valido");
 			return nivel;
 		}
     	return nivel;
@@ -96,10 +142,10 @@ int calcularNivelNodo(TNodo *R, int k){
 }
 
 
-// Recebe uma árvore de busca R e um inteiro v.
-// Devolve um nó cuja chave é igual a v. 
-// Devolve NULL se tal nó não existe.
-//
+/* Recebe uma arvore de busca R e um inteiro v.
+* Devolve um no cuja chave e igual a v. 
+* Devolve NULL se tal no nao existe.
+*/
 TNodo *searchR(TNodo *R, int v) {
     int t;
     if (R == NULL){
@@ -120,7 +166,7 @@ TNodo *searchR(TNodo *R, int v) {
 
 void remover(TNodo **R, int id){
     if(*R == NULL){   // esta verificacao serve para caso o id nao exista na arvore.
-       printf("Numero %d nao existe na arvore!", id);
+       printf("\n\nNumero %d nao existe na arvore!", id);
        //getch();
        return;
     }
@@ -172,7 +218,6 @@ TNodo *MaiorDireita(TNodo **no){
 
 int estritamente_bin(TNodo *no){
     if(!no->dir && !no->esq){
-    	printf("\n\nArvore nao Estritamente Binaria");
         return 1;
     }
 
@@ -186,17 +231,27 @@ int estritamente_bin(TNodo *no){
 void estritamenteBinariaCompleta(TNodo *no){
 	
 	if(estritamente_bin(no)){
+		printf("\n\nArvore Estritamente Binaria");
 		if(contaNosFolhas(no) == pow(2, h)){
 			printf("e Completa!");
 		}else{
 			printf("!");
 		}
 	}else{
-		printf("\nNao estritamente binaria e nao completa");
+		printf("\n\nNao estritamente binaria e nao completa");
 	}
 }
 
 int contaNosFolhas(TNodo *no){
-    if (no == NULL) return 1;
-    return count(no->esq) + count(no->dir);
+    if(!no){
+    	return 0;
+    }else if(no -> esq == NULL && no -> dir == NULL){
+    	return  1;
+    }
+	return(contaNosFolhas(no->esq) + contaNosFolhas(no->dir)); 
 }
+
+
+
+
+

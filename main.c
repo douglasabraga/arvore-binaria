@@ -1,16 +1,10 @@
 
-#include "arvore.h"
+#include "hash.h"
 
 int main(){
-	
+	inicializarHash(10);
 	inicializa(&raiz);
-
-	insere(&raiz, 1, "TITO", 42.12);
-	insere(&raiz, 4, "LIVIA", 512.12);
-	insere(&raiz, 2, "RUAN", 244.33);
-	insere(&raiz, 5, "PAULA", 123.12);
-	insere(&raiz, 3, "VARLA", 312.11);
-
+	lerArquivo(&raiz);
 	h = height(raiz);
 
 	printf("\n\n\nCRESCENTE:");
@@ -19,29 +13,30 @@ int main(){
 	printf("\n\n\nDECRESCENTE:");
 	decrescente(raiz);
 
-	printf("\ncount: %d", count(raiz));
-	printf("\naltura: %d", h);
+	printf("\n\nQuantidade de nos na arvore: %d", qntdNos(raiz));
+	printf("\n\nAltura da arvore: %d", h);
 
 	int nivelNodo = calcularNivelNodo(raiz, 2);
-	printf("\nNivel nodo %d: %d",2, nivelNodo);
-
+	printf("\n\nNivel nodo %d: %d",2, nivelNodo);
+	
+	estritamenteBinariaCompleta(raiz);
+	
 	TNodo *n = searchR(raiz, 4);
 	if(n != NULL){
-		printf("\nPesquisa Raiz: %s", n->nome);	
+		printf("\n\nPesquisa Raiz: %s", n->nome);	
 	}else{
-		printf("\nValor informado para pesquisa nao existe!");
+		printf("\n\nValor informado para pesquisa nao existe!");
 	}
-
-	printf("\n\n\nCaminhamento CRESCENTE:");
-	crescente(raiz);
-
-	estritamenteBinariaCompleta(raiz);
-
-	int contFolhas = contaNosFolhas(raiz);
-	printf("\nQntd Folhas: %d", contFolhas);
-	printf("\naltura: %d", h);
-	printf(   "\n %.0f", pow(2, h)   );
-
-	//system("PAUSE");
+	
+	 percorrerArvoreInserirHash(raiz);
+	 printf("\n\nAASAA");
+	 printf("\nINSERINDO MANUALMENTE");
+	 insereHash(7,"silva", 23.123);
+	 insereHash(2,"falko", 1.23);
+	 insereHash(1,"dani", 56.123);
+	 insereHash(3,"dodo", 23.444);
+	 //printf("\nValor id: %d", HASH[1].id);                                                                               
+	 imprimirHash();
+                 
     getchar();
 }
