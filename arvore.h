@@ -11,7 +11,9 @@ typedef struct tipoNodo{
 }TNodo;
 
 TNodo *raiz;
+TNodo *vetor;
 int h;
+int tamanhoVetor;
 
 void lerArquivo(TNodo **R);
 void separarDadosDaLinha(TNodo **R, char linha[50]);
@@ -29,4 +31,7 @@ void decrescente(TNodo *R);
 int estritamente_bin(TNodo *no);
 int contaNosFolhas(TNodo *no);
 void estritamenteBinariaCompleta(TNodo *no);
-
+/*--------------------- VETOR ----------------------------*/
+void insereVetor(int id, char nome[50], float saldo);
+void inicializarVetor();
+TNodo *alocaVetor();

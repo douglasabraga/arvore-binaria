@@ -41,6 +41,7 @@ void separarDadosDaLinha(TNodo **R, char linha[50]){
 
 		insere(&(*R), id, nome, saldo);
 		insereHash(id, nome, saldo);
+		/*insereVetor(id, nome, saldo);*/
 	}
 //	return hash;
 }
@@ -245,13 +246,41 @@ void estritamenteBinariaCompleta(TNodo *no){
 int contaNosFolhas(TNodo *no){
     if(!no){
     	return 0;
-    }else if(no -> esq == NULL && no -> dir == NULL){
+    }else if(no->esq == NULL && no->dir == NULL){
     	return  1;
     }
 	return(contaNosFolhas(no->esq) + contaNosFolhas(no->dir)); 
 }
 
 
+void insereVetor(int id, char nome[50], float saldo){
+	int cont = 0;
+	int aux;
+	if(vetor[0].id == 0){
+		vetor[0].id = id;
+		vetor[0].saldo = saldo;
+		strcpy(vetor[0].nome,nome);
+	}else if(vetor[0].id > id){
+		aux = vetor[0].id*2;
+		vetor[aux].id = id;
+		vetor[aux].saldo = saldo;
+		strcpy(vetor[aux].nome,nome);
+	}else{
+		aux = (vetor[0].id*2)+1;
+		vetor[aux].id = id;
+		vetor[aux].saldo = saldo;
+		strcpy(vetor[aux].nome,nome);
+	}
+}
 
-
-
+TNodo *alocaVetor(){
+	int cont = h;
+	while(cont > 0){
+		tamanhoVetor += pow(2,cont);
+		cont--;
+	}
+	printf("Tamanho do vetor: %d", tamanhoVetor);
+	
+	return (TNodo*) calloc(tamanhoVetor, sizeof(TNodo));
+	
+}

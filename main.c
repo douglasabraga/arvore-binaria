@@ -3,6 +3,7 @@
 
 int main(){
 	inicializarHash(5);
+	alocaVetor();
 	inicializa(&raiz);
 	lerArquivo(&raiz);
 	h = height(raiz);
@@ -31,8 +32,10 @@ int main(){
 	TNodo *no = buscaHash(2);
 	
 	printf("\n\nBusca feita: %d, %s\n\n", no->id, no->nome);
-                                                                               
+    
+	
+	                                                           
 	imprimirHash();
-                 
+    //system("pause");
     getchar();
 }
