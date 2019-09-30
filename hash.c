@@ -64,6 +64,7 @@ TNodo* buscaHash(int chave) {
 }
 
 void inicializarHash(int tamanho){
+	tam = tamanho;
 	HASH = aloca(tamanho);
     int i;
     for(i = 0; i < tam; i++){

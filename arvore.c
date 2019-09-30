@@ -53,7 +53,6 @@ void inicializa(TNodo **R){
 void insere(TNodo **R, int id, char nome[50], float saldo){
     if((*R) == NULL){
     	(*R) = geraNodo(id, nome, saldo);
-    	printf("\nINSEREEEid: %d nome: %s saldo: %.2f", (*R)->id,(*R)->nome,(*R)->saldo);
     } else if ((*R)->id < id){
     	 if((*R)->dir == NULL){
     	 	(*R)->dir = geraNodo(id, nome, saldo);
@@ -122,24 +121,19 @@ int qntdNos(TNodo *R){
 int calcularNivelNodo(TNodo *R, int k){
     TNodo *aux = R;
     int nivel = 0;
-    
-	if(R->esq == NULL || R->dir == NULL){
-		if(R->id != k){
-			printf("\n\nO id informado nao e valido");
-			return nivel;
-		}
-    	return nivel;
-	}
-	
-    while (aux != NULL && aux->id != k){
+
+    while (aux != NULL){
         if(k < aux->id){
             aux = aux->esq;
+        }else if(aux->id == k){
+        	return nivel;
         }else{
             aux = aux->dir;
         }
        nivel++;
     }
-    return nivel;
+
+    return -1;
 }
 
 
@@ -232,14 +226,16 @@ int estritamente_bin(TNodo *no){
 void estritamenteBinariaCompleta(TNodo *no){
 	
 	if(estritamente_bin(no)){
-		printf("\n\nArvore Estritamente Binaria");
+		printf("\nArvore Estritamente Binaria: TRUE");
 		if(contaNosFolhas(no) == pow(2, h)){
-			printf("e Completa!");
+			printf("\nArvore Estritamente Binaria e Completa: TRUE");
 		}else{
-			printf("!");
+			//printf("\nArvore Estritamente Binaria: TRUE");
+			printf("\nArvore Estritamente Binaria e Completa: FALSE");
 		}
 	}else{
-		printf("\n\nNao estritamente binaria e nao completa");
+		printf("\nArvore Estritamente Binaria: FALSE");
+		printf("\nArvore Estritamente Binaria e Completa: FALSE");
 	}
 }
 
