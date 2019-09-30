@@ -1,5 +1,50 @@
 
-#include "arvore.h"
+#include "hash.h"
+
+void lerArquivo(TNodo **R){
+	char linha[50]; // string armazenara a linha
+    FILE *arq;
+
+    arq = fopen("DadosBancoPulini.txt","r"); // Abre o arquivo
+    if (arq == NULL){  // Se houve erro na abertura
+		printf("Problemas na abertura do arquivo\n");
+	}else{
+		while(fgets(linha, sizeof(linha)-1, arq) != NULL) { // Loop para ler cada linha do arquivo enquanto houver linhas
+			separarDadosDaLinha(&(*R),linha);
+		}
+	}
+    fclose(arq);
+    //return hash;
+}
+
+void separarDadosDaLinha(TNodo **R, char linha[50]){
+	char delimitador[] = "|"; // Caracter delimitador
+    char *info; // Ponteiro para armazenar as informacoes
+
+	int id;
+	char nome[50];
+	float saldo;
+
+	info = strtok(linha, delimitador); // info recebe a primeira string antes do primeiro delimitador da primeira linha
+
+	while(info != NULL) { // Enquanto houver linhas no arquivo
+
+		id = atoi(info); // Copia info para id
+
+		info = strtok(NULL, delimitador); // Separa o nome da linha
+		strcpy(nome, info);
+
+		info = strtok(NULL, delimitador); // Separa o saldo da linha
+		saldo = atof(info);
+
+		info = strtok(NULL,delimitador); // Separa o codigo da linha
+
+		insere(&(*R), id, nome, saldo);
+		insereHash(id, nome, saldo);
+		//insereVetor(id, nome, saldo);
+	}
+//	return hash;
+}
 
 void inicializa(TNodo **R){
     (*R) = NULL;
@@ -21,10 +66,11 @@ void insere(TNodo **R, int id, char nome[50], float saldo){
     		insere(&(*R)->esq, id, nome, saldo);
     	}
     }
+    
 }
 //=================================================
 TNodo *geraNodo(int id, char nome[50], float saldo){
-   TNodo *novo = (TNodo *)malloc(sizeof(TNodo));
+   TNodo *novo = (TNodo *)calloc(1,sizeof(TNodo));
    novo->id = id;
    strcpy(novo->nome,nome);
    novo->saldo = saldo;
@@ -54,7 +100,7 @@ void decrescente(TNodo *R){
 //================================================
 
 
-// Devolve a altura de um nó R em uma árvore binária.
+// Devolve a altura de um no R em uma arvore binaria.
 
 int height(TNodo *R){
     int u, v;
@@ -65,41 +111,36 @@ int height(TNodo *R){
     else return v + 1;
 }
 
-// Esta função devolve o número de nós
-// da árvore binária cuja raiz é R.
-int count(TNodo *R){
+// Esta funcao devolve o numero de nos
+// da arvore binaria cuja raiz e R.
+int qntdNos(TNodo *R){
     if (R == NULL) return 0;
-    return count(R->esq) + count(R->dir) + 1;
+    return qntdNos(R->esq) + qntdNos(R->dir) + 1;
 }
 
 int calcularNivelNodo(TNodo *R, int k){
     TNodo *aux = R;
     int nivel = 0;
-    
-	if(R->esq == NULL || R->dir == NULL){
-		if(R->id != k){
-			printf("\nO id informado nao e valido");
-			return nivel;
-		}
-    	return nivel;
-	}
-	
-    while (aux != NULL && aux->id != k){
+
+    while (aux != NULL){
         if(k < aux->id){
             aux = aux->esq;
+        }else if(aux->id == k){
+        	return nivel;
         }else{
             aux = aux->dir;
         }
        nivel++;
     }
-    return nivel;
+
+    return -1;
 }
 
 
-// Recebe uma árvore de busca R e um inteiro v.
-// Devolve um nó cuja chave é igual a v. 
-// Devolve NULL se tal nó não existe.
-//
+/* Recebe uma arvore de busca R e um inteiro v.
+* Devolve um no cuja chave e igual a v. 
+* Devolve NULL se tal no nao existe.
+*/
 TNodo *searchR(TNodo *R, int v) {
     int t;
     if (R == NULL){
@@ -120,7 +161,7 @@ TNodo *searchR(TNodo *R, int v) {
 
 void remover(TNodo **R, int id){
     if(*R == NULL){   // esta verificacao serve para caso o id nao exista na arvore.
-       printf("Numero %d nao existe na arvore!", id);
+       printf("\n\nNumero %d nao existe na arvore!", id);
        //getch();
        return;
     }
@@ -172,7 +213,6 @@ TNodo *MaiorDireita(TNodo **no){
 
 int estritamente_bin(TNodo *no){
     if(!no->dir && !no->esq){
-    	printf("\n\nArvore nao Estritamente Binaria");
         return 1;
     }
 
@@ -186,17 +226,124 @@ int estritamente_bin(TNodo *no){
 void estritamenteBinariaCompleta(TNodo *no){
 	
 	if(estritamente_bin(no)){
+		printf("\nArvore Estritamente Binaria: TRUE");
 		if(contaNosFolhas(no) == pow(2, h)){
-			printf("e Completa!");
+			printf("\nArvore Estritamente Binaria e Completa: TRUE");
 		}else{
-			printf("!");
+			//printf("\nArvore Estritamente Binaria: TRUE");
+			printf("\nArvore Estritamente Binaria e Completa: FALSE");
 		}
 	}else{
-		printf("\nNao estritamente binaria e nao completa");
+		printf("\nArvore Estritamente Binaria: FALSE");
+		printf("\nArvore Estritamente Binaria e Completa: FALSE");
 	}
 }
 
 int contaNosFolhas(TNodo *no){
-    if (no == NULL) return 1;
-    return count(no->esq) + count(no->dir);
+    if(!no){
+    	return 0;
+    }else if(no->esq == NULL && no->dir == NULL){
+    	return  1;
+    }
+	return(contaNosFolhas(no->esq) + contaNosFolhas(no->dir)); 
 }
+
+
+/*================================   VETOR   ========================================*/
+
+
+void lerArquivoVetor(){
+	char linha[50]; // string armazenara a linha
+    FILE *arq;
+
+    arq = fopen("DadosBancoPulini.txt","r"); // Abre o arquivo
+    if (arq == NULL){  // Se houve erro na abertura
+		printf("Problemas na abertura do arquivo\n");
+	}else{
+		while(fgets(linha, sizeof(linha)-1, arq) != NULL) { // Loop para ler cada linha do arquivo enquanto houver linhas
+			separarDadosDaLinhaVetor(linha);
+		}
+	}
+    fclose(arq);
+    //return hash;
+}
+
+void separarDadosDaLinhaVetor(char linha[50]){
+	char delimitador[] = "|"; // Caracter delimitador
+    char *info; // Ponteiro para armazenar as informacoes
+
+	int id;
+	char nome[50];
+	float saldo;
+
+	info = strtok(linha, delimitador); // info recebe a primeira string antes do primeiro delimitador da primeira linha
+
+	while(info != NULL) { // Enquanto houver linhas no arquivo
+
+		id = atoi(info); // Copia info para id
+
+		info = strtok(NULL, delimitador); // Separa o nome da linha
+		strcpy(nome, info);
+
+		info = strtok(NULL, delimitador); // Separa o saldo da linha
+		saldo = atof(info);
+
+		info = strtok(NULL,delimitador); // Separa o codigo da linha
+
+		insereVetor(id, nome, saldo);
+	}
+//	return hash;
+}
+
+void insereVetor(int id, char nome[50], float saldo){
+	int cont = 0;
+	int aux = 1;
+	if(vetor[cont].id == 0){
+		vetor[cont].id = id;
+		vetor[cont].saldo = saldo;
+		strcpy(vetor[cont].nome,nome);
+	}else{
+		while(aux){
+			if(vetor[cont].id > 0){
+				if(vetor[cont].id > id){
+					cont = (cont*2) + 2;
+				}else{
+					cont = (cont*2) + 1;
+				}
+			}else{
+				aux = 0;
+			}
+		}
+		vetor[cont].id = id;
+		vetor[cont].saldo = saldo;
+		strcpy(vetor[cont].nome,nome);
+	}
+}
+
+TNodo *alocaVetor(){
+	//printf("h = %d", h);
+	int cont = h;
+	while(cont > 0){
+		//printf("cont: %d", cont);
+		tamanhoVetor += pow(2,cont);
+		cont--;
+	}
+	printf("Tamanho do vetor: %d", tamanhoVetor);
+	
+	return (TNodo*) calloc(tamanhoVetor*2, sizeof(TNodo));
+	
+}
+
+int isEspelho(TNodo *R, int i){
+
+    if (R == NULL && vetor[i].id == 0) 
+        return 1; 
+
+    if (R && vetor[i].id > 0 && R->id == vetor[i].id) 
+        return isEspelho(R->esq, ((2*i)+2)) && isEspelho(R->dir, ((2*i)+1)); 
+
+    return 0; 
+}
+
+
+

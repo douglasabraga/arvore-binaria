@@ -1,47 +1,121 @@
 
-#include "arvore.h"
+#include "hash.h"
+void menu();
 
 int main(){
 	
 	inicializa(&raiz);
-
-	insere(&raiz, 1, "TITO", 42.12);
-	insere(&raiz, 4, "LIVIA", 512.12);
-	insere(&raiz, 2, "RUAN", 244.33);
-	insere(&raiz, 5, "PAULA", 123.12);
-	insere(&raiz, 3, "VARLA", 312.11);
-
+	
+	inicializarHash(5);
+	
+	lerArquivo(&raiz);
 	h = height(raiz);
-
-	printf("\n\n\nCRESCENTE:");
-	crescente(raiz);
-
-	printf("\n\n\nDECRESCENTE:");
-	decrescente(raiz);
-
-	printf("\ncount: %d", count(raiz));
-	printf("\naltura: %d", h);
-
-	int nivelNodo = calcularNivelNodo(raiz, 2);
-	printf("\nNivel nodo %d: %d",2, nivelNodo);
-
-	TNodo *n = searchR(raiz, 4);
-	if(n != NULL){
-		printf("\nPesquisa Raiz: %s", n->nome);	
-	}else{
-		printf("\nValor informado para pesquisa nao existe!");
-	}
-
-	printf("\n\n\nCaminhamento CRESCENTE:");
-	crescente(raiz);
-
+	
+	vetor = alocaVetor();
+	
+	lerArquivoVetor();
+	
+	printf("\nAltura da Arvore: %d", h);
+	
+	int i = qntdNos(raiz);
+	
+	printf("\nQuantidade de nos na arvore: %d", i);
+	
 	estritamenteBinariaCompleta(raiz);
+	
+	i = isEspelho(raiz, 0);
+    
+    if(i)
+    	printf("\nEspelho Similar: TRUE");
+    else
+    	printf("\nEspelho Similar: FALSE");
 
-	int contFolhas = contaNosFolhas(raiz);
-	printf("\nQntd Folhas: %d", contFolhas);
-	printf("\naltura: %d", h);
-	printf(   "\n %.0f", pow(2, h)   );
 
-	//system("PAUSE");
+    menu();
+    
     getchar();
+}
+
+void menu(){
+	int op;
+	int aux;
+	
+	//clock_t inicioArvore, fimArvore, inicioHash, fimHash;
+	
+	do{
+		printf("\n=============================================");
+		printf("\n0 - SAIR");
+		printf("\n1 - Imprimir hash");
+		printf("\n2 - Imprimir elementos em ordem crescente");
+		printf("\n3 - Imprimir elementos em ordem decrescente");
+		printf("\n4 - Calcular nivel de determinado no");
+		printf("\n5 - Buscar um elemento pela chave");
+		printf("\n6 - Remover um elemento da arvore pela chave");
+		printf("\n=============================================");
+		printf("\n->");
+		scanf("%d", &op);
+		printf("\n");
+	}while(op < 0 || op > 6);
+	
+	switch(op){
+		case 1:
+			imprimirHash();
+			menu();
+			break;
+		case 2:
+			crescente(raiz);
+			menu();
+			break;
+		case 3:
+			decrescente(raiz);
+			menu();
+			break;
+		case 4:
+			printf("\nInsira a chave:");
+			scanf("%d", &aux);
+			aux = calcularNivelNodo(raiz, aux);
+			if(aux < 0){
+				printf("\nChave informada nao foi encontrada!");
+			}else{
+				printf("\n\nNivel da chave %d", aux);
+			}
+			menu();
+			break;
+		
+		case 5:
+			printf("\nInsira a chave:");
+			scanf("%d", &aux);
+			
+			//inicioArvore
+			TNodo *n = searchR(raiz, aux);
+			//fimArvore
+			
+			if(n != NULL){
+				printf("\n\nPesquisa Raiz: %s", n->nome);	
+			}else{
+				printf("\n\nValor informado para pesquisa nao existe!");
+			}
+			
+			//inicioHash
+			TNodo *no = buscaHash(aux);
+			//fimHash
+			
+			if(no != NULL){
+				printf("\n\nBusca feita: %d, %s\n\n", no->id, no->nome);	
+			}else{
+				printf("\n\nValor informado para pesquisa nao existe!");
+			}
+
+			menu();
+			break;
+		
+		case 6:
+			printf("\nInsira a chave:");
+			scanf("%d", &aux);
+			
+			remover(&raiz, aux);
+			
+			menu();
+			break;	
+	}
 }
