@@ -1,7 +1,7 @@
 
 #include "hash.h"
 
-void lerArquivo(TNodo **R){
+void lerArquivoArvore(TNodo **R){
 	char linha[50]; // string armazenara a linha
     FILE *arq;
 
@@ -10,14 +10,14 @@ void lerArquivo(TNodo **R){
 		printf("Problemas na abertura do arquivo\n");
 	}else{
 		while(fgets(linha, sizeof(linha)-1, arq) != NULL) { // Loop para ler cada linha do arquivo enquanto houver linhas
-			separarDadosDaLinha(&(*R),linha);
+			separarDadosDaLinhaArvore(&(*R),linha);
 		}
 	}
     fclose(arq);
-    //return hash;
 }
 
-void separarDadosDaLinha(TNodo **R, char linha[50]){
+
+void separarDadosDaLinhaArvore(TNodo **R, char linha[50]){
 	char delimitador[] = "|"; // Caracter delimitador
     char *info; // Ponteiro para armazenar as informacoes
 
@@ -41,15 +41,16 @@ void separarDadosDaLinha(TNodo **R, char linha[50]){
 
 		insere(&(*R), id, nome, saldo);
 		insereHash(id, nome, saldo);
-		//insereVetor(id, nome, saldo);
 	}
-//	return hash;
 }
 
-void inicializa(TNodo **R){
+
+void inicializaArvore(TNodo **R){
     (*R) = NULL;
 }
-//=================================================
+
+
+
 void insere(TNodo **R, int id, char nome[50], float saldo){
     if((*R) == NULL){
     	(*R) = geraNodo(id, nome, saldo);
@@ -68,7 +69,8 @@ void insere(TNodo **R, int id, char nome[50], float saldo){
     }
     
 }
-//=================================================
+
+
 TNodo *geraNodo(int id, char nome[50], float saldo){
    TNodo *novo = (TNodo *)calloc(1,sizeof(TNodo));
    novo->id = id;
@@ -79,44 +81,40 @@ TNodo *geraNodo(int id, char nome[50], float saldo){
    return novo;
 }
 
-//================================================
+
 void crescente(TNodo *R){
 	if(R != NULL){
     	crescente(R->esq);
-		printf(" %s %d",R->nome, R->id);
+		printf("\n id: %d\t nome: %s\t saldo: %f ",R->id, R->nome, R->saldo);
 		crescente(R->dir);
-	}//if
+	}
 }
+
 
 void decrescente(TNodo *R){
 	if(R != NULL){
     	decrescente(R->dir);
-		printf(" %s %d",R->nome, R->id);
+		printf("\n id: %d\t nome: %s\t saldo: %f ",R->id, R->nome, R->saldo);
 		decrescente(R->esq);
-	}//if
+	}
 }
-//=================================================
-
-//================================================
 
 
-// Devolve a altura de um no R em uma arvore binaria.
-
-int height(TNodo *R){
+int alturaArvore(TNodo *R){
     int u, v;
     if (R == NULL) return -1;
-    u = height(R->esq);
-    v = height(R->dir);
+    u = alturaArvore(R->esq);
+    v = alturaArvore(R->dir);
     if (u > v) return u + 1;
     else return v + 1;
 }
 
-// Esta funcao devolve o numero de nos
-// da arvore binaria cuja raiz e R.
+
 int qntdNos(TNodo *R){
     if (R == NULL) return 0;
     return qntdNos(R->esq) + qntdNos(R->dir) + 1;
 }
+
 
 int calcularNivelNodo(TNodo *R, int k){
     TNodo *aux = R;
@@ -132,62 +130,52 @@ int calcularNivelNodo(TNodo *R, int k){
         }
        nivel++;
     }
-
     return -1;
 }
 
 
-/* Recebe uma arvore de busca R e um inteiro v.
-* Devolve um no cuja chave e igual a v. 
-* Devolve NULL se tal no nao existe.
-*/
-TNodo *searchR(TNodo *R, int v) {
-    int t;
+TNodo *buscaArvore(TNodo *R, int v) {
     if (R == NULL){
     	return NULL;
-	}
-    t = R->id;
-    
-    if(v == t){
-    	return R;	
-	}else if (v < t){
-       return searchR(R->esq, v);
 	}else{
-       return searchR(R->dir, v);
-   }
+		if(v > R->id){
+			return buscaArvore(R->dir, v);
+		}else if(v < R->id){
+			return buscaArvore(R->esq, v);
+		}else return R;
+	}
 }
 
-//https://pt.stackoverflow.com/questions/192974/como-funciona-a-remo%C3%A7%C3%A3o-de-%C3%A1rvore-bin%C3%A1ria-em-c
 
-void remover(TNodo **R, int id){
+void removerArvore(TNodo **R, int id){
     if(*R == NULL){   // esta verificacao serve para caso o id nao exista na arvore.
        printf("\n\nNumero %d nao existe na arvore!", id);
        //getch();
        return;
     }
     if(id < (*R)->id){
-       remover(&(*R)->esq, id);
+       removerArvore(&(*R)->esq, id);
     }else{
        	if(id > (*R)->id){
-          remover(&(*R)->dir, id);
-       	}else{    // se nao eh menor nem maior, logo, eh o id que estou procurando! :)
-          TNodo *pAux = *R;     // quem programar no Embarcadero vai ter que declarar o pAux no inicio do void! :[
-          if(((*R)->esq == NULL) && ((*R)->dir == NULL)){         // se nao houver filhos...
+          removerArvore(&(*R)->dir, id);
+       	}else{    // se nao eh menor nem maior, logo, eh o id que estou procurando!
+          TNodo *pAux = *R;     
+          if(((*R)->esq == NULL) && ((*R)->dir == NULL)){// se nao houver filhos
                 free(pAux);
                 (*R) = NULL;   
-          	}else{     // so tem o filho da dir
+          	}else{     // filho da direita
              if((*R)->esq == NULL){
                 (*R) = (*R)->dir;
                 pAux->dir = NULL;
                 free(pAux); pAux = NULL;     
-            }else{            //so tem filho da esq
+            }else{            //filho da esquerda
                 if((*R)->dir == NULL){
                     (*R) = (*R)->esq;
                     pAux->esq = NULL;
                     free(pAux); pAux = NULL;
-                }else{       //Escolhi fazer o maior filho direito da subarvore esq.
-                   pAux = MaiorDireita(&(*R)->esq); //se vc quiser usar o Menor da esq, so o que mudaria seria isso:
-                   pAux->esq = (*R)->esq;          //        pAux = Menoresq(&(*R)->dir);
+                }else{       
+                   pAux = MaiorDireita(&(*R)->esq);
+                   pAux->esq = (*R)->esq;
                    pAux->dir = (*R)->dir;
                    (*R)->esq = (*R)->dir = NULL;
                    free((*R));  *R = pAux;  pAux = NULL;   
@@ -198,18 +186,20 @@ void remover(TNodo **R, int id){
       }
 }
 
+
 TNodo *MaiorDireita(TNodo **no){
     if((*no)->dir != NULL) 
        return MaiorDireita(&(*no)->dir);
     else{
        TNodo *aux = *no;
-       if((*no)->esq != NULL) // se nao houver essa verificacao, esse nó vai perder todos os seus filhos da esquerda!
+       if((*no)->esq != NULL)
           *no = (*no)->esq;
        else
           *no = NULL;
        return aux;
-       }
+    }
 }
+
 
 int estritamente_bin(TNodo *no){
     if(!no->dir && !no->esq){
@@ -223,6 +213,7 @@ int estritamente_bin(TNodo *no){
     return 0;
 }
 
+
 void estritamenteBinariaCompleta(TNodo *no){
 	
 	if(estritamente_bin(no)){
@@ -230,7 +221,6 @@ void estritamenteBinariaCompleta(TNodo *no){
 		if(contaNosFolhas(no) == pow(2, h)){
 			printf("\nArvore Estritamente Binaria e Completa: TRUE");
 		}else{
-			//printf("\nArvore Estritamente Binaria: TRUE");
 			printf("\nArvore Estritamente Binaria e Completa: FALSE");
 		}
 	}else{
@@ -238,6 +228,7 @@ void estritamenteBinariaCompleta(TNodo *no){
 		printf("\nArvore Estritamente Binaria e Completa: FALSE");
 	}
 }
+
 
 int contaNosFolhas(TNodo *no){
     if(!no){
@@ -265,8 +256,8 @@ void lerArquivoVetor(){
 		}
 	}
     fclose(arq);
-    //return hash;
 }
+
 
 void separarDadosDaLinhaVetor(char linha[50]){
 	char delimitador[] = "|"; // Caracter delimitador
@@ -292,8 +283,8 @@ void separarDadosDaLinhaVetor(char linha[50]){
 
 		insereVetor(id, nome, saldo);
 	}
-//	return hash;
 }
+
 
 void insereVetor(int id, char nome[50], float saldo){
 	int cont = 0;
@@ -320,19 +311,16 @@ void insereVetor(int id, char nome[50], float saldo){
 	}
 }
 
+
 TNodo *alocaVetor(){
-	//printf("h = %d", h);
 	int cont = h;
 	while(cont > 0){
-		//printf("cont: %d", cont);
 		tamanhoVetor += pow(2,cont);
 		cont--;
 	}
-	printf("Tamanho do vetor: %d", tamanhoVetor);
-	
 	return (TNodo*) calloc(tamanhoVetor*2, sizeof(TNodo));
-	
 }
+
 
 int isEspelho(TNodo *R, int i){
 

@@ -1,15 +1,15 @@
-
+#include <time.h>
 #include "hash.h"
 void menu();
 
 int main(){
 	
-	inicializa(&raiz);
+	inicializaArvore(&raiz);
 	
-	inicializarHash(5);
+	inicializarHash(50);
 	
-	lerArquivo(&raiz);
-	h = height(raiz);
+	lerArquivoArvore(&raiz);
+	h = alturaArvore(raiz);
 	
 	vetor = alocaVetor();
 	
@@ -39,8 +39,8 @@ int main(){
 void menu(){
 	int op;
 	int aux;
-	
-	//clock_t inicioArvore, fimArvore, inicioHash, fimHash;
+	float tempoArvore, tempoHash;
+	clock_t inicioArvore, fimArvore, inicioHash, fimHash;
 	
 	do{
 		printf("\n=============================================");
@@ -86,26 +86,33 @@ void menu(){
 			printf("\nInsira a chave:");
 			scanf("%d", &aux);
 			
-			//inicioArvore
-			TNodo *n = searchR(raiz, aux);
-			//fimArvore
+			inicioArvore = clock();
+			TNodo *n = buscaArvore(raiz, aux);
 			
-			if(n != NULL){
-				printf("\n\nPesquisa Raiz: %s", n->nome);	
+			fimArvore = clock();
+			
+			if(n == NULL){
+				printf("\nValor Informado Nao Encontrado!");	
 			}else{
-				printf("\n\nValor informado para pesquisa nao existe!");
+				printf("\n\nRegistro Encontrado na Arvore:\nId: %d\nNome: %s\nSaldo: %.2f", n->id, n->nome, n->saldo);
 			}
 			
-			//inicioHash
+			inicioHash = clock();
 			TNodo *no = buscaHash(aux);
-			//fimHash
+			fimHash = clock();
 			
-			if(no != NULL){
-				printf("\n\nBusca feita: %d, %s\n\n", no->id, no->nome);	
+			if(no == NULL){
+				printf("\nValor Informado Nao Encontrado!");
 			}else{
-				printf("\n\nValor informado para pesquisa nao existe!");
+				printf("\n\nRegistro Encontrado na HASH:\nId: %d\nNome: %s\nSaldo: %.2f", no->id, no->nome, no->saldo);
 			}
-
+			
+			tempoArvore = ((float)fimArvore - (float) inicioArvore) /CLOCKS_PER_SEC;
+			tempoHash = ((float)fimHash - (float) inicioHash) /CLOCKS_PER_SEC;
+			printf("\n\nTempo Arvore: %f", tempoArvore);
+			printf("\nTempo Hash: %f", tempoArvore);
+			printf("\nRazao do Tempo: %d%%",(tempoArvore/tempoHash));
+			
 			menu();
 			break;
 		
@@ -113,7 +120,7 @@ void menu(){
 			printf("\nInsira a chave:");
 			scanf("%d", &aux);
 			
-			remover(&raiz, aux);
+			removerArvore(&raiz, aux);
 			
 			menu();
 			break;	
