@@ -1,6 +1,6 @@
 # Árvore Binária em C
 
-## Prejeto ofertado pela disciplina de Tópicos de Programação Avançada
+## Prejeto ofertado pela disciplina de Técnicas de Programação Avançada
 
 Desenvolver uma estrutura de dados usando arvore binária com alocação dinâmica que permita ler o arquivo gerado no aplicativo fornecido pelo professor. Esta estrutura deve inserir os elementos na árvore binária pelo código. E deve ter as seguintes opções:
 
